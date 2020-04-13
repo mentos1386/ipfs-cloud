@@ -2,3 +2,6 @@ vendor
 main
 dist
 out
+ipfs-cloud
+go
+
