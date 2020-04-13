@@ -1,0 +1,35 @@
+{
+  "app-id": "space.tjo.ipfs-cloud",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.36",
+  "sdk": "org.gnome.Sdk",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.golang"
+  ],
+  "finish-args": [
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--share=ipc",
+    "--filesystem=host",
+    "--share=network",
+    "--talk-name=org.kde.StatusNotifierWatcher"
+  ],
+  "command": "ipfs-cloud",
+  "modules": [
+    {
+      "name": "ipfs-cloud",
+      "buildsystem": "simple",
+      "build-options": {
+        "env": {
+          "GOBIN": "/app/bin"
+        },
+        "build-args": [
+          "--share=network"
+        ]
+      },
+      "build-commands": [
+        ". /usr/lib/sdk/golang/enable.sh; export GOPATH=$PWD/go; go build -o ipfs-cloud"
+      ]
+    }
+  ]
+}
