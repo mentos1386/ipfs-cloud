@@ -1,9 +1,10 @@
-module github.com/mentos1386/ipfscrypt
+module github.com/mentos1386/ipfs-cloud
 
 go 1.14
 
 require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/gotk3/gotk3 v0.4.0
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/pelletier/go-toml v1.7.0 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
