@@ -12,5 +12,8 @@ An [Gnome](https://www.gnome.org/) application for storing private data on [IPFS
  * https://github.com/ipfs/go-ipfs
  * https://godoc.org/golang.org/x/crypto/openpgp
  * https://github.com/gotk3/gotk3
+ * https://github.com/zalando/go-keyring
 
+## Progress
 
+ * [TODO.md](TODO.md)
