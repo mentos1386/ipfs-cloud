@@ -13,7 +13,7 @@ var configCmd = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		application.Start(cmd.Version, "space.tjo.ipfs-cloud")
+		application.Create(cmd.Version, "space.tjo.ipfs-cloud", args)
 	},
 }
 

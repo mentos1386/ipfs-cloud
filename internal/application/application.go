@@ -9,7 +9,8 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func Start(version string, appID string) {
+// Create a new ipfs-cloud application
+func Create(version string, appID string, args []string) {
 	// Create a new application.
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	errorCheck(err)
@@ -53,7 +54,7 @@ func Start(version string, appID string) {
 	})
 
 	// Launch the application
-	os.Exit(application.Run(os.Args))
+	os.Exit(application.Run(args))
 }
 
 func isWindow(obj glib.IObject) (*gtk.Window, error) {
