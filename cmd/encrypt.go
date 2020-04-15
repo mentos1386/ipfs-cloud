@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// encryptCmd represents the encrypt command
 var encryptCmd = &cobra.Command{
 	Use:   "encrypt",
 	Short: "encrypt STDIN",

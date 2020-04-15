@@ -1,18 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkWindow" id="main_window">
+  <object class="GtkApplicationWindow">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Glade Example</property>
-    <property name="default_width">480</property>
-    <property name="default_height">300</property>
-    <signal name="destroy" handler="on_main_window_destroy" swapped="no"/>
-    <child>
-      <placeholder/>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title" translatable="yes">Hello World</property>
+        <property name="subtitle" translatable="yes">Banana</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">button</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+        </child>
+      </object>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkFixed">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkTextView" id="public-pgp">
+            <property name="width_request">200</property>
+            <property name="height_request">200</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="wrap_mode">word</property>
+            <property name="accepts_tab">False</property>
+            <property name="monospace">True</property>
+          </object>
+          <packing>
+            <property name="x">38</property>
+            <property name="y">71</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width_request">71</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Public PGP</property>
+          </object>
+          <packing>
+            <property name="x">39</property>
+            <property name="y">45</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="private-pgp">
+            <property name="width_request">200</property>
+            <property name="height_request">200</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="wrap_mode">word</property>
+            <property name="accepts_tab">False</property>
+            <property name="monospace">True</property>
+          </object>
+          <packing>
+            <property name="x">309</property>
+            <property name="y">70</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width_request">71</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Private PGP</property>
+          </object>
+          <packing>
+            <property name="x">310</property>
+            <property name="y">47</property>
+          </packing>
+        </child>
+      </object>
     </child>
   </object>
 </interface>

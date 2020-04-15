@@ -4,4 +4,4 @@ dist
 out
 ipfs-cloud
 go
-
+*.glade~

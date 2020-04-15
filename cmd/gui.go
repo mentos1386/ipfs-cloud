@@ -6,8 +6,7 @@ import (
 	"github.com/mentos1386/ipfs-cloud/internal/application"
 )
 
-// configCmd represents the config command
-var configCmd = &cobra.Command{
+var guiCmd = &cobra.Command{
 	Use:   "gui",
 	Short: "Start GUI",
 	Long:  ``,
@@ -18,5 +17,5 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(guiCmd)
 }
