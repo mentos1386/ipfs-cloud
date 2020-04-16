@@ -5,3 +5,4 @@ out
 ipfs-cloud
 go
 *.glade~
+*.pgp

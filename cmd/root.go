@@ -15,9 +15,6 @@ var rootCmd = &cobra.Command{
 	Short:   "Private file storage on IPFS",
 	Long:    `Store anything you want on IPFS`,
 	Version: Version,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
-	},
 }
 
 func Execute() {

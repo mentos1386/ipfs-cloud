@@ -9,6 +9,8 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
+var builder gtk.Builder
+
 // Create a new ipfs-cloud application
 func Create(version string, appID string, args []string) {
 	// Create a new application.
@@ -31,7 +33,7 @@ func Create(version string, appID string, args []string) {
 		// Map the handlers to callback functions, and connect the signals
 		// to the Builder.
 		signals := map[string]interface{}{
-			"on_main_window_destroy": onMainWindowDestroy,
+			"chose-pgp-key_file_set_cb": chose_pgp_key_file_set_cb,
 		}
 		builder.ConnectSignals(signals)
 
@@ -57,12 +59,20 @@ func Create(version string, appID string, args []string) {
 	os.Exit(application.Run(args))
 }
 
-func isWindow(obj glib.IObject) (*gtk.Window, error) {
+func isWindow(obj glib.IObject) (*gtk.ApplicationWindow, error) {
 	// Make type assertion (as per gtk.go).
-	if win, ok := obj.(*gtk.Window); ok {
+	if win, ok := obj.(*gtk.ApplicationWindow); ok {
 		return win, nil
 	}
-	return nil, errors.New("not a *gtk.Window")
+	return nil, errors.New("not a *gtk.ApplicationWindow")
+}
+
+func isFileChooserButton(obj glib.IObject) (*gtk.FileChooserButton, error) {
+	// Make type assertion (as per gtk.go).
+	if button, ok := obj.(*gtk.FileChooserButton); ok {
+		return button, nil
+	}
+	return nil, errors.New("not a *gtk.FileChooserButton")
 }
 
 func errorCheck(e error) {
@@ -72,9 +82,13 @@ func errorCheck(e error) {
 	}
 }
 
-// onMainWindowDestory is the callback that is linked to the
-// on_main_window_destroy handler. It is not required to map this,
-// and is here to simply demo how to hook-up custom callbacks.
-func onMainWindowDestroy() {
-	log.Println("onMainWindowDestroy")
+func chose_pgp_key_file_set_cb() {
+	_, err := builder.GetObject("chose-pgp-key")
+	errorCheck(err)
+	//button, err := isFileChooserButton(obj)
+	//errorCheck(err)
+
+	//filename := button.GetFilename()
+
+	//log.Printf("Filename changed: %s", filename)
 }

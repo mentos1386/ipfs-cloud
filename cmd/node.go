@@ -7,6 +7,7 @@ import (
 
 var nodeCmd = &cobra.Command{
 	Use:  "node",
+	Short: "Start IPFS Node",
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		ipfs.StartNode()
