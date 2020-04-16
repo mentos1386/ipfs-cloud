@@ -11,4 +11,5 @@ require (
 	github.com/libp2p/go-libp2p-peerstore v0.2.3
 	github.com/multiformats/go-multiaddr v0.2.1
 	github.com/spf13/cobra v1.0.0
+	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 )

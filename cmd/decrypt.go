@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// decryptCmd represents the decrypt command
 var decryptCmd = &cobra.Command{
 	Use:   "decrypt",
 	Short: "decrypt STDIN",

@@ -2,14 +2,18 @@ package application
 
 import (
 	"errors"
+	"io/ioutil"
 	"log"
 	"os"
+	"bytes"
+	"time"
+
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/packet"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
-
-var builder gtk.Builder
 
 // Create a new ipfs-cloud application
 func Create(version string, appID string, args []string) {
@@ -33,7 +37,7 @@ func Create(version string, appID string, args []string) {
 		// Map the handlers to callback functions, and connect the signals
 		// to the Builder.
 		signals := map[string]interface{}{
-			"chose-pgp-key_file_set_cb": chose_pgp_key_file_set_cb,
+			"encrypt_clicked_cb": func() { encrypt_clicked_cb(builder) },
 		}
 		builder.ConnectSignals(signals)
 
@@ -82,13 +86,74 @@ func errorCheck(e error) {
 	}
 }
 
-func chose_pgp_key_file_set_cb() {
-	_, err := builder.GetObject("chose-pgp-key")
+func getPgpEntity(builder *gtk.Builder) *openpgp.Entity {
+	pgpObj, err := builder.GetObject("chose-pgp-key")
 	errorCheck(err)
-	//button, err := isFileChooserButton(obj)
-	//errorCheck(err)
+	pgpButton, err := isFileChooserButton(pgpObj)
+	errorCheck(err)
 
-	//filename := button.GetFilename()
+	pgpFilename := pgpButton.GetFilename()
+	pgpFile, err := ioutil.ReadFile(pgpFilename)
+	errorCheck(err)
+	pgpReader := packet.NewReader(bytes.NewReader(pgpFile))
 
-	//log.Printf("Filename changed: %s", filename)
+	entity, err := openpgp.ReadEntity(pgpReader)
+	errorCheck(err)
+
+	return entity
+}
+
+func getDecryptedFile(builder *gtk.Builder ) ([]byte, openpgp.FileHints) {
+	fileObj, err := builder.GetObject("chose-decrypted")
+	errorCheck(err)
+	fileButton, err := isFileChooserButton(fileObj)
+	errorCheck(err)
+
+	filename := fileButton.GetFilename()
+	b, err := ioutil.ReadFile(filename)
+	errorCheck(err)
+
+	fileHint := openpgp.FileHints{
+		IsBinary: false,
+		FileName: filename,
+		ModTime: time.Now(),
+	}
+	
+	return b, fileHint
+}
+
+func getEncryptedFolderPath(builder *gtk.Builder) string {
+	folderObj, err := builder.GetObject("chose-encrypted")
+	errorCheck(err)
+	folderButton, err := isFileChooserButton(folderObj)
+	errorCheck(err)
+
+	return folderButton.GetFilename()
+}
+
+func encrypt_clicked_cb(builder *gtk.Builder) {
+
+	log.Println("reading private key...")
+	entity := getPgpEntity(builder)
+
+	log.Println("decrypting private key...")
+	err := entity.PrivateKey.Decrypt([]byte("banana"))
+	errorCheck(err)
+
+
+	log.Println("reading file to encrypt...")
+	decryptedFile, fileHints := getDecryptedFile(builder)
+
+
+	log.Println("geting folder to store encrypted file to...")
+	encryptedFolderPath := getEncryptedFolderPath(builder)
+	log.Println(encryptedFolderPath)
+
+	log.Println("encrypting...")
+	ioWriterCloser, err := openpgp.Encrypt(os.Stdout, []*openpgp.Entity{ entity }, entity, &fileHints, &packet.Config{})
+	errorCheck(err)
+
+	ioWriterCloser.Write(decryptedFile)
+	ioWriterCloser.Close()
+	
 }
