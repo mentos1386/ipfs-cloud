@@ -5,13 +5,13 @@
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/mentos1386/ipfs-cloud)
 [![Release](https://img.shields.io/github/release/golang-standards/project-layout.svg)](https://github.com/mentos1836/ipfs-cloud/latest)
 
-An [Gnome](https://www.gnome.org/) application for storing private data on [IPFS](https://ipfs.io/).
+An [Gnome](https://www.gnome.org/) application for storing private data on [IPFS](https://ipfs.io/). Idea first written thee years ago [here](https://github.com/mentos1386/metalsmith-blog/blob/master/site/posts/ipfs-cloud.md)
 
 
 ## Build with
- * https://github.com/ipfs/go-ipfs
- * https://godoc.org/golang.org/x/crypto/openpgp
- * https://github.com/gotk3/gotk3
+ * __IPFS:__ https://github.com/ipfs/go-ipfs
+ * __OpenPGP:__ https://gopenpgp.org/
+ * __GTK3:__ https://github.com/gotk3/gotk3
  * https://github.com/zalando/go-keyring
 
 ## Progress

@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"errors"
@@ -6,10 +6,8 @@ import (
 	"log"
 	"os"
 	"bytes"
-	"time"
 
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/packet"
+	gopenpgp "github.com/ProtonMail/gopenpgp/v2/crypto"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
@@ -86,7 +84,7 @@ func errorCheck(e error) {
 	}
 }
 
-func getPgpEntity(builder *gtk.Builder) *openpgp.Entity {
+func getPgpKey(builder *gtk.Builder) *gopenpgp.Key {
 	pgpObj, err := builder.GetObject("chose-pgp-key")
 	errorCheck(err)
 	pgpButton, err := isFileChooserButton(pgpObj)
@@ -95,15 +93,14 @@ func getPgpEntity(builder *gtk.Builder) *openpgp.Entity {
 	pgpFilename := pgpButton.GetFilename()
 	pgpFile, err := ioutil.ReadFile(pgpFilename)
 	errorCheck(err)
-	pgpReader := packet.NewReader(bytes.NewReader(pgpFile))
 
-	entity, err := openpgp.ReadEntity(pgpReader)
+	key, err := gopenpgp.NewKeyFromArmoredReader(bytes.NewReader(pgpFile))
 	errorCheck(err)
 
-	return entity
+	return key
 }
 
-func getDecryptedFile(builder *gtk.Builder ) ([]byte, openpgp.FileHints) {
+func getDecryptedFile(builder *gtk.Builder) []byte {
 	fileObj, err := builder.GetObject("chose-decrypted")
 	errorCheck(err)
 	fileButton, err := isFileChooserButton(fileObj)
@@ -113,13 +110,7 @@ func getDecryptedFile(builder *gtk.Builder ) ([]byte, openpgp.FileHints) {
 	b, err := ioutil.ReadFile(filename)
 	errorCheck(err)
 
-	fileHint := openpgp.FileHints{
-		IsBinary: false,
-		FileName: filename,
-		ModTime: time.Now(),
-	}
-	
-	return b, fileHint
+	return b
 }
 
 func getEncryptedFolderPath(builder *gtk.Builder) string {
@@ -134,26 +125,28 @@ func getEncryptedFolderPath(builder *gtk.Builder) string {
 func encrypt_clicked_cb(builder *gtk.Builder) {
 
 	log.Println("reading private key...")
-	entity := getPgpEntity(builder)
+	key := getPgpKey(builder)
 
 	log.Println("decrypting private key...")
-	err := entity.PrivateKey.Decrypt([]byte("banana"))
+	key, err := key.Unlock([]byte("banana"))
 	errorCheck(err)
 
-
 	log.Println("reading file to encrypt...")
-	decryptedFile, fileHints := getDecryptedFile(builder)
-
+	decryptedFile := getDecryptedFile(builder)
 
 	log.Println("geting folder to store encrypted file to...")
 	encryptedFolderPath := getEncryptedFolderPath(builder)
 	log.Println(encryptedFolderPath)
 
 	log.Println("encrypting...")
-	ioWriterCloser, err := openpgp.Encrypt(os.Stdout, []*openpgp.Entity{ entity }, entity, &fileHints, &packet.Config{})
+	keyRing, err := gopenpgp.NewKeyRing(key)
 	errorCheck(err)
 
-	ioWriterCloser.Write(decryptedFile)
-	ioWriterCloser.Close()
-	
+	pgpMessage, err := keyRing.Encrypt(gopenpgp.NewPlainMessage(decryptedFile), nil)
+	errorCheck(err)
+
+	pgpMessageArmored, err := pgpMessage.GetArmored()
+	errorCheck(err)
+
+	log.Println(pgpMessageArmored)
 }

@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-
-	"github.com/mentos1386/ipfs-cloud/internal/application"
+	"github.com/mentos1386/ipfs-cloud/pkg/app"
 )
 
 var guiCmd = &cobra.Command{
@@ -12,7 +11,7 @@ var guiCmd = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		application.Create(cmd.Version, "space.tjo.ipfs-cloud", args)
+		app.Create(cmd.Version, "space.tjo.ipfs-cloud", args)
 	},
 }
 

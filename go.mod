@@ -3,6 +3,7 @@ module github.com/mentos1386/ipfs-cloud
 go 1.14
 
 require (
+	github.com/ProtonMail/gopenpgp/v2 v2.0.1-0.20200414132903-599adb6b2d6b
 	github.com/gotk3/gotk3 v0.4.0
 	github.com/ipfs/go-ipfs v0.5.0-rc2
 	github.com/ipfs/go-ipfs-config v0.5.2
@@ -13,3 +14,7 @@ require (
 	github.com/spf13/cobra v1.0.0
 	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 )
+
+// We have to use this version as it introduces dependencies for ipfs
+//  and later commits brake compatibility with ProtonMail/gopenpgp/v2
+replace golang.org/x/crypto => github.com/ProtonMail/crypto v1.0.1-0.20200414132716-142ca7810b13
