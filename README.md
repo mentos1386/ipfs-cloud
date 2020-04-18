@@ -13,6 +13,7 @@ An [Gnome](https://www.gnome.org/) application for storing private data on [IPFS
  * __OpenPGP:__ https://gopenpgp.org/
  * __GTK3:__ https://github.com/gotk3/gotk3
  * https://github.com/zalando/go-keyring
+ * https://github.com/looplab/fsm
 
 ## Progress
 

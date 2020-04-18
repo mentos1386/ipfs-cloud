@@ -13,21 +13,7 @@
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can_focus">False</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title" translatable="yes">Hello World</property>
-        <property name="subtitle" translatable="yes">Banana</property>
-        <property name="show_close_button">True</property>
-        <child>
-          <object class="GtkFileChooserButton" id="chose-pgp-key">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="filter">pgp-filter</property>
-            <property name="title" translatable="yes"/>
-          </object>
-        </child>
-      </object>
+      <placeholder/>
     </child>
     <child>
       <object class="GtkFixed">
@@ -35,7 +21,7 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkFileChooserButton" id="chose-decrypted">
-            <property name="width_request">100</property>
+            <property name="width_request">179</property>
             <property name="height_request">80</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -48,7 +34,7 @@
         </child>
         <child>
           <object class="GtkFileChooserButton" id="chose-encrypted">
-            <property name="width_request">100</property>
+            <property name="width_request">217</property>
             <property name="height_request">80</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -99,6 +85,34 @@
           <packing>
             <property name="x">445</property>
             <property name="y">54</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFileChooserButton" id="chose-pgp-key">
+            <property name="width_request">178</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="filter">pgp-filter</property>
+            <property name="title" translatable="yes"/>
+            <signal name="file-set" handler="chose-pgp-key_file_set_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">28</property>
+            <property name="y">183</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width_request">105</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">PGP Private Key</property>
+          </object>
+          <packing>
+            <property name="x">32</property>
+            <property name="y">154</property>
           </packing>
         </child>
       </object>
