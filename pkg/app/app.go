@@ -15,7 +15,7 @@ func Create(version string, appID string, args []string) {
 	// Create a new application.
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	if err != nil {
-		log.Panic("Failed creating gtk application! %v", err)
+		log.Panicf("Failed creating gtk application! %v", err)
 	}
 
 	// Connect function to application startup event, this is not required.
@@ -29,7 +29,7 @@ func Create(version string, appID string, args []string) {
 
 		mainWindow, err := windows.CreateMain(application)
 		if err != nil {
-			log.Panic("Failed creating main window! %v", err)
+			log.Panicf("Failed creating main window! %v", err)
 		}
 
 		mainWindow.Show()
