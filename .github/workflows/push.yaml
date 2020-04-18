@@ -20,13 +20,12 @@ jobs:
       - name: install golangci-lint
         run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
 
-      - run: go mod download
+      - run: go get
       
       - name: run-linter
         run: golangci-lint run
         env:
           GOPROXY: off
-          GOFLAGS: -mod=readonly
 
       - name: run-tests
         run: go test -race -vet all -mod readonly ./...
