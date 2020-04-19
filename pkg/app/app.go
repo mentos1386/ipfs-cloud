@@ -2,7 +2,6 @@ package app
 
 import (
 	"log"
-	"os"
 
 	"github.com/mentos1386/ipfs-cloud/pkg/app/windows"
 
@@ -11,20 +10,23 @@ import (
 )
 
 // Create a new ipfs-cloud application
-func Create(version string, appID string, args []string) {
+func Create(version string, appID string) (*gtk.Application, error) {
 	// Create a new application.
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	if err != nil {
-		log.Panicf("Failed creating gtk application! %v", err)
+		return nil, err
 	}
 
 	// Connect function to application startup event, this is not required.
-	application.Connect("startup", func() {
+	_, err = application.Connect("startup", func() {
 		log.Println("application startup")
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	// Connect function to application activate event
-	application.Connect("activate", func() {
+	_, err = application.Connect("activate", func() {
 		log.Println("application activate")
 
 		mainWindow, err := windows.CreateMain(application)
@@ -35,14 +37,19 @@ func Create(version string, appID string, args []string) {
 		mainWindow.Show()
 		application.AddWindow(mainWindow)
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	// Connect function to application shutdown event, this is not required.
-	application.Connect("shutdown", func() {
+	_, err = application.Connect("shutdown", func() {
 		log.Println("application shutdown")
 	})
+	if err != nil {
+		return nil, err
+	}
 
-	// Launch the application
-	os.Exit(application.Run(args))
+	return application, nil
 }
 
 

@@ -3,8 +3,8 @@ package utils
 import (
 	"errors"
 
-	"github.com/gotk3/gotk3/gtk"
 	"github.com/gotk3/gotk3/glib"
+	"github.com/gotk3/gotk3/gtk"
 )
 
 func IsApplicationWindow(obj glib.IObject) (*gtk.ApplicationWindow, error) {
