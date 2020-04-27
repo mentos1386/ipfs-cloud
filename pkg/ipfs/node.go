@@ -10,7 +10,6 @@ import (
 	config "github.com/ipfs/go-ipfs-config"
 	libp2p "github.com/ipfs/go-ipfs/core/node/libp2p"
 	icore "github.com/ipfs/interface-go-ipfs-core"
-	peerstore "github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/multiformats/go-multiaddr"
 
 	"github.com/ipfs/go-ipfs/core"
@@ -87,21 +86,23 @@ func spawnDefault(ctx context.Context) (icore.CoreAPI, error) {
 
 //
 
-func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) error {
+func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string, errc chan error) {
 	var wg sync.WaitGroup
-	peerInfos := make(map[peer.ID]*peerstore.PeerInfo, len(peers))
+	peerInfos := make(map[peer.ID]*peer.AddrInfo, len(peers))
 	for _, addrStr := range peers {
 		addr, err := ma.NewMultiaddr(addrStr)
 		if err != nil {
-			return err
+			errc <- err
+			return
 		}
-		pii, err := peerstore.InfoFromP2pAddr(addr)
+		pii, err := peer.AddrInfoFromP2pAddr(addr)
 		if err != nil {
-			return err
+			errc <- err
+			return
 		}
 		pi, ok := peerInfos[pii.ID]
 		if !ok {
-			pi = &peerstore.PeerInfo{ID: pii.ID}
+			pi = &peer.AddrInfo{ID: pii.ID}
 			peerInfos[pi.ID] = pi
 		}
 		pi.Addrs = append(pi.Addrs, pii.Addrs...)
@@ -109,7 +110,7 @@ func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) err
 
 	wg.Add(len(peerInfos))
 	for _, peerInfo := range peerInfos {
-		go func(peerInfo *peerstore.PeerInfo) {
+		go func(peerInfo *peer.AddrInfo) {
 			defer wg.Done()
 			err := ipfs.Swarm().Connect(ctx, *peerInfo)
 			if err != nil {
@@ -118,7 +119,6 @@ func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) err
 		}(peerInfo)
 	}
 	wg.Wait()
-	return nil
 }
 
 /// -------
@@ -161,7 +161,13 @@ func StartNode() {
 		// "/ip4/127.0.0.1/tcp/4010/p2p/QmZp2fhDLxjYue2RiUvLwT9MWdnbDxam32qYFnGmxZDh5L",
 	}
 
-	go connectToPeers(ctx, ipfs, bootstrapNodes)
+	errc := make(chan error, 1)
+	go connectToPeers(ctx, ipfs, bootstrapNodes, errc)
+
+	err = <-errc
+	if err != nil {
+		log.Printf("Failed connecting to peers: %v", err)
+	}
 
 	fmt.Println("\nAll done! You just finalized your first tutorial on how to use go-ipfs as a library")
 }

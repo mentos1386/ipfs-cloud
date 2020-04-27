@@ -1,12 +1,12 @@
 package windows
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
-	"bytes"
-
 
 	"github.com/mentos1386/ipfs-cloud/pkg/app/dialogs"
+	"github.com/mentos1386/ipfs-cloud/pkg/app/state"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
 
 	gopenpgp "github.com/ProtonMail/gopenpgp/v2/crypto"
@@ -21,20 +21,49 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 		return nil, err
 	}
 
-	chosePgpKeyObj, err := builder.GetObject("chose-pgp-key")
+	stackUploadObj, err := builder.GetObject("stack_upload")
 	if err != nil {
 		return nil, err
 	}
-	chosePgpButton, err := utils.IsFileChooserButton(chosePgpKeyObj)
+	stackUploadFixed, err := utils.IsFixed(stackUploadObj)
+	if err != nil {
+		return nil, err
+	}
+	stackSharedFilesObj, err := builder.GetObject("stack_shared_files")
+	if err != nil {
+		return nil, err
+	}
+	stackSharedFilesFixed, err := utils.IsFixed(stackSharedFilesObj)
 	if err != nil {
 		return nil, err
 	}
 
+	stackSwitcherObj, err := builder.GetObject("stack_switcher")
+	if err != nil {
+		return nil, err
+	}
+	stackSwitcherSwitcher, err := utils.IsStackSwitcher(stackSwitcherObj)
+	if err != nil {
+		return nil, err
+	}
+
+	stackObj, err := builder.GetObject("stack")
+	if err != nil {
+		return nil, err
+	}
+	stackStack, err := utils.IsStack(stackObj)
+	if err != nil {
+		return nil, err
+	}
+	stackStack.AddTitled(stackUploadFixed, "upload", "Upload")
+	stackStack.AddTitled(stackSharedFilesFixed, "shared-files", "Shared Files")
+	stackSwitcherSwitcher.SetStack(stackStack)
+
 	// Map the handlers to callback functions, and connect the signals
 	// to the Builder.
 	signals := map[string]interface{}{
-		"encrypt_clicked_cb": func() { encryptClickedCB(builder) },
-		"chose-pgp-key_file_set_cb": func() { chosePgpKeyFileSetCB(application, chosePgpButton) },
+		"account_settings_clicked_cb": func() { accountSettingsClicked(application) },
+		"encrypt_clicked_cb":          func() { encryptClickedCB(builder) },
 	}
 	builder.ConnectSignals(signals)
 
@@ -52,7 +81,6 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 
 	return mainWindow, nil
 }
-
 
 func errorCheck(e error) {
 	if e != nil {
@@ -100,13 +128,7 @@ func getEncryptedFolderPath(builder *gtk.Builder) string {
 }
 
 func encryptClickedCB(builder *gtk.Builder) {
-
-	log.Println("reading private key...")
-	key := getPgpKey(builder)
-
-	log.Println("decrypting private key...")
-	key, err := key.Unlock([]byte("bananana"))
-	errorCheck(err)
+	state := state.GetState()
 
 	log.Println("reading file to encrypt...")
 	decryptedFile := getDecryptedFile(builder)
@@ -116,7 +138,7 @@ func encryptClickedCB(builder *gtk.Builder) {
 	log.Println(encryptedFolderPath)
 
 	log.Println("encrypting...")
-	keyRing, err := gopenpgp.NewKeyRing(key)
+	keyRing, err := gopenpgp.NewKeyRing(state.OpenPGPDecryptedKey)
 	errorCheck(err)
 
 	pgpMessage, err := keyRing.Encrypt(gopenpgp.NewPlainMessage(decryptedFile), nil)
@@ -128,9 +150,9 @@ func encryptClickedCB(builder *gtk.Builder) {
 	log.Println(pgpMessageArmored)
 }
 
-func chosePgpKeyFileSetCB(application *gtk.Application, fileChooserbutton *gtk.FileChooserButton) {
-	unlockKeyDialog, err := dialogs.CreateUnlockKey(application)
+func accountSettingsClicked(application *gtk.Application) {
+	accountSettingsDialog, err := dialogs.CreateAccountSettings(application)
 	errorCheck(err)
 
-	unlockKeyDialog.Show()
+	accountSettingsDialog.Show()
 }

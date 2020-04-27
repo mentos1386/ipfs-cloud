@@ -2,120 +2,149 @@
 <!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkFileFilter" id="pgp-filter">
-    <mime-types>
-      <mime-type>PGP Keys</mime-type>
-    </mime-types>
-    <patterns>
-      <pattern>*.pgp</pattern>
-    </patterns>
-  </object>
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can_focus">False</property>
     <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child>
-      <object class="GtkFixed">
+      <object class="GtkHeaderBar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="show_close_button">True</property>
         <child>
-          <object class="GtkFileChooserButton" id="chose-decrypted">
-            <property name="width_request">179</property>
-            <property name="height_request">80</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="title" translatable="yes"/>
-          </object>
-          <packing>
-            <property name="x">29</property>
-            <property name="y">53</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFileChooserButton" id="chose-encrypted">
-            <property name="width_request">217</property>
-            <property name="height_request">80</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="action">select-folder</property>
-            <property name="title" translatable="yes"/>
-          </object>
-          <packing>
-            <property name="x">216</property>
-            <property name="y">55</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="width_request">93</property>
-            <property name="height_request">20</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">File to Encrypt</property>
-          </object>
-          <packing>
-            <property name="x">31</property>
-            <property name="y">31</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="width_request">111</property>
-            <property name="height_request">20</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Folder to write to</property>
-          </object>
-          <packing>
-            <property name="x">218</property>
-            <property name="y">32</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="encrypt">
-            <property name="label" translatable="yes">Encrypt</property>
-            <property name="width_request">100</property>
-            <property name="height_request">80</property>
+          <object class="GtkButton" id="account_settings">
+            <property name="label" translatable="yes">account settings</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="encrypt_clicked_cb" swapped="no"/>
+            <signal name="clicked" handler="account_settings_clicked_cb" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkStackSwitcher" id="stack_switcher">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
           </object>
           <packing>
-            <property name="x">445</property>
-            <property name="y">54</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkFileChooserButton" id="chose-pgp-key">
-            <property name="width_request">178</property>
-            <property name="height_request">80</property>
+          <object class="GtkButton" id="about">
+            <property name="label">gtk-about</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="filter">pgp-filter</property>
-            <property name="title" translatable="yes"/>
-            <signal name="file-set" handler="chose-pgp-key_file_set_cb" swapped="no"/>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_stock">True</property>
           </object>
           <packing>
-            <property name="x">28</property>
-            <property name="y">183</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="width_request">105</property>
-            <property name="height_request">20</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">PGP Private Key</property>
-          </object>
-          <packing>
-            <property name="x">32</property>
-            <property name="y">154</property>
+            <property name="pack_type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFixed" id="stack_shared_files">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">280</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Looks like you havent shared any files yet....</property>
+      </object>
+      <packing>
+        <property name="x">110</property>
+        <property name="y">79</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkFixed" id="stack_upload">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkFileChooserButton" id="chose-decrypted">
+        <property name="width_request">100</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title" translatable="yes"/>
+      </object>
+      <packing>
+        <property name="x">31</property>
+        <property name="y">96</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFileChooserButton" id="chose-encrypted">
+        <property name="width_request">156</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action">select-folder</property>
+        <property name="title" translatable="yes"/>
+      </object>
+      <packing>
+        <property name="x">153</property>
+        <property name="y">100</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">100</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">File to Encrypt</property>
+      </object>
+      <packing>
+        <property name="x">33</property>
+        <property name="y">10</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">111</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Folder to write to</property>
+      </object>
+      <packing>
+        <property name="x">162</property>
+        <property name="y">14</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="encrypt">
+        <property name="label" translatable="yes">Encrypt</property>
+        <property name="width_request">100</property>
+        <property name="height_request">80</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <signal name="clicked" handler="encrypt_clicked_cb" swapped="no"/>
+      </object>
+      <packing>
+        <property name="x">330</property>
+        <property name="y">103</property>
+      </packing>
     </child>
   </object>
 </interface>

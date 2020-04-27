@@ -51,5 +51,3 @@ func Create(version string, appID string) (*gtk.Application, error) {
 
 	return application, nil
 }
-
-
