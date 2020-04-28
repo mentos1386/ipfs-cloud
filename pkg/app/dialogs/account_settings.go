@@ -1,7 +1,6 @@
 package dialogs
 
 import (
-	"errors"
 	"log"
 
 	"github.com/gotk3/gotk3/gtk"
@@ -9,7 +8,7 @@ import (
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
 )
 
-func CreateAccountSettings(application *gtk.Application) (*gtk.Dialog, error) {
+func CreateAccountSettings(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/dialogs/account_settings.glade")
 	if err != nil {
@@ -21,11 +20,9 @@ func CreateAccountSettings(application *gtk.Application) (*gtk.Dialog, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Verify that the object is a pointer to a gtk.Dialog.
-	dialog, ok := obj.(*gtk.Dialog)
-	if !ok {
-		return nil, errors.New("not a *gtk.Dialog")
+	window, err := utils.IsApplicationWindow(obj)
+	if err != nil {
+		return nil, err
 	}
 
 	chosePgpKeyObj, err := builder.GetObject("chose_pgp_key")
@@ -41,11 +38,11 @@ func CreateAccountSettings(application *gtk.Application) (*gtk.Dialog, error) {
 	// to the Builder.
 	signals := map[string]interface{}{
 		"chose_pgp_key_file_set_cb":         func() { chosePgpKeyFileSetCB(application, chosePgpButton) },
-		"account_settings_apply_clicked_cb": dialog.Close,
+		"account_settings_apply_clicked_cb": window.Close,
 	}
 	builder.ConnectSignals(signals)
 
-	return dialog, nil
+	return window, nil
 }
 
 func chosePgpKeyFileSetCB(application *gtk.Application, button *gtk.FileChooserButton) {

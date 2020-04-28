@@ -78,3 +78,11 @@ func IsFixed(obj glib.IObject) (*gtk.Fixed, error) {
 	}
 	return nil, errors.New("not a *gtk.Fixed")
 }
+
+func IsBox(obj glib.IObject) (*gtk.Box, error) {
+	// Make type assertion (as per gtk.go).
+	if box, ok := obj.(*gtk.Box); ok {
+		return box, nil
+	}
+	return nil, errors.New("not a *gtk.Box")
+}

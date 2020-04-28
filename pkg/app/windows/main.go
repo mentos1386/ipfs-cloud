@@ -1,7 +1,6 @@
 package windows
 
 import (
-	"bytes"
 	"io/ioutil"
 	"log"
 
@@ -25,7 +24,7 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 	if err != nil {
 		return nil, err
 	}
-	stackUploadFixed, err := utils.IsFixed(stackUploadObj)
+	stackUploadBox, err := utils.IsBox(stackUploadObj)
 	if err != nil {
 		return nil, err
 	}
@@ -38,15 +37,6 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 		return nil, err
 	}
 
-	stackSwitcherObj, err := builder.GetObject("stack_switcher")
-	if err != nil {
-		return nil, err
-	}
-	stackSwitcherSwitcher, err := utils.IsStackSwitcher(stackSwitcherObj)
-	if err != nil {
-		return nil, err
-	}
-
 	stackObj, err := builder.GetObject("stack")
 	if err != nil {
 		return nil, err
@@ -55,9 +45,8 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 	if err != nil {
 		return nil, err
 	}
-	stackStack.AddTitled(stackUploadFixed, "upload", "Upload")
+	stackStack.AddTitled(stackUploadBox, "upload", "Upload")
 	stackStack.AddTitled(stackSharedFilesFixed, "shared-files", "Shared Files")
-	stackSwitcherSwitcher.SetStack(stackStack)
 
 	// Map the handlers to callback functions, and connect the signals
 	// to the Builder.
@@ -89,24 +78,8 @@ func errorCheck(e error) {
 	}
 }
 
-func getPgpKey(builder *gtk.Builder) *gopenpgp.Key {
-	pgpObj, err := builder.GetObject("chose-pgp-key")
-	errorCheck(err)
-	pgpButton, err := utils.IsFileChooserButton(pgpObj)
-	errorCheck(err)
-
-	pgpFilename := pgpButton.GetFilename()
-	pgpFile, err := ioutil.ReadFile(pgpFilename)
-	errorCheck(err)
-
-	key, err := gopenpgp.NewKeyFromArmoredReader(bytes.NewReader(pgpFile))
-	errorCheck(err)
-
-	return key
-}
-
 func getDecryptedFile(builder *gtk.Builder) []byte {
-	fileObj, err := builder.GetObject("chose-decrypted")
+	fileObj, err := builder.GetObject("upload_file")
 	errorCheck(err)
 	fileButton, err := utils.IsFileChooserButton(fileObj)
 	errorCheck(err)
@@ -118,15 +91,6 @@ func getDecryptedFile(builder *gtk.Builder) []byte {
 	return b
 }
 
-func getEncryptedFolderPath(builder *gtk.Builder) string {
-	folderObj, err := builder.GetObject("chose-encrypted")
-	errorCheck(err)
-	folderButton, err := utils.IsFileChooserButton(folderObj)
-	errorCheck(err)
-
-	return folderButton.GetFilename()
-}
-
 func encryptClickedCB(builder *gtk.Builder) {
 	state := state.GetState()
 
@@ -134,7 +98,7 @@ func encryptClickedCB(builder *gtk.Builder) {
 	decryptedFile := getDecryptedFile(builder)
 
 	log.Println("geting folder to store encrypted file to...")
-	encryptedFolderPath := getEncryptedFolderPath(builder)
+	encryptedFolderPath := "/home/tinej-personal/Downloads"
 	log.Println(encryptedFolderPath)
 
 	log.Println("encrypting...")

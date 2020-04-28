@@ -5,6 +5,7 @@
   <object class="GtkDialog" id="unlock_private_key_dialog">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <child type="titlebar">
       <placeholder/>
