@@ -1,16 +1,21 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 	"github.com/spf13/cobra"
 )
 
 var nodeCmd = &cobra.Command{
-	Use:  "node",
+	Use:   "node",
 	Short: "Start IPFS Node",
-	Args: cobra.NoArgs,
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		ipfs.StartNode()
+		_, err := ipfs.StartNode()
+		if err != nil {
+			log.Panic(err)
+		}
 	},
 }
 

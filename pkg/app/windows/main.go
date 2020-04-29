@@ -6,6 +6,7 @@ import (
 	"github.com/mentos1386/ipfs-cloud/pkg/app/dialogs"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/stacks"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
+	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -35,6 +36,12 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 	// to the Builder.
 	signals := map[string]interface{}{
 		"account_settings_clicked_cb": func() { accountSettingsClicked(application) },
+		"start_node_clicked_cb": func() {
+			_, err := ipfs.StartNode()
+			if err != nil {
+				log.Panic(err)
+			}
+		},
 	}
 	builder.ConnectSignals(signals)
 
