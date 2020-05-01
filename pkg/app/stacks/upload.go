@@ -5,13 +5,15 @@ import (
 	"log"
 
 	gopenpgp "github.com/ProtonMail/gopenpgp/v2/crypto"
+	icore "github.com/ipfs/interface-go-ipfs-core"
 
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/state"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
+	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 )
 
-func CreateUpload(application *gtk.Application) (*gtk.Box, error) {
+func CreateUpload(application *gtk.Application, node icore.CoreAPI) (*gtk.Box, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/stacks/upload.glade")
 	if err != nil {
@@ -31,7 +33,7 @@ func CreateUpload(application *gtk.Application) (*gtk.Box, error) {
 	// Map the handlers to callback functions, and connect the signals
 	// to the Builder.
 	signals := map[string]interface{}{
-		"upload_file_file_set_cb": func() { uploadFile(builder) },
+		"upload_file_file_set_cb": func() { uploadFile(builder, node) },
 	}
 	builder.ConnectSignals(signals)
 
@@ -58,7 +60,7 @@ func getDecryptedFile(builder *gtk.Builder) (*[]byte, error) {
 	return &b, nil
 }
 
-func uploadFile(builder *gtk.Builder) {
+func uploadFile(builder *gtk.Builder, node icore.CoreAPI) {
 	state := state.GetState()
 
 	log.Println("reading file to encrypt...")
@@ -88,4 +90,11 @@ func uploadFile(builder *gtk.Builder) {
 	}
 
 	log.Println(pgpMessageArmored)
+
+	path, err := ipfs.Store(pgpMessageArmored, node)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	log.Println(path)
 }

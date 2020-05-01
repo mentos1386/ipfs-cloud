@@ -6,20 +6,27 @@ import (
 	"github.com/mentos1386/ipfs-cloud/pkg/app/dialogs"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/stacks"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
-	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
+
+	icore "github.com/ipfs/interface-go-ipfs-core"
 
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
+func CreateMain(application *gtk.Application, ipfs icore.CoreAPI) (*gtk.ApplicationWindow, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/main.glade")
 	if err != nil {
 		return nil, err
 	}
 
-	stackUpload, err := stacks.CreateUpload(application)
-	stackFiles, err := stacks.CreateFiles(application)
+	stackUpload, err := stacks.CreateUpload(application, ipfs)
+	if err != nil {
+		return nil, err
+	}
+	stackFiles, err := stacks.CreateFiles(application, ipfs)
+	if err != nil {
+		return nil, err
+	}
 
 	stackObj, err := builder.GetObject("stack")
 	if err != nil {
@@ -36,12 +43,6 @@ func CreateMain(application *gtk.Application) (*gtk.ApplicationWindow, error) {
 	// to the Builder.
 	signals := map[string]interface{}{
 		"account_settings_clicked_cb": func() { accountSettingsClicked(application) },
-		"start_node_clicked_cb": func() {
-			_, err := ipfs.StartNode()
-			if err != nil {
-				log.Panic(err)
-			}
-		},
 	}
 	builder.ConnectSignals(signals)
 

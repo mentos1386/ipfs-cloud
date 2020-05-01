@@ -86,3 +86,11 @@ func IsBox(obj glib.IObject) (*gtk.Box, error) {
 	}
 	return nil, errors.New("not a *gtk.Box")
 }
+
+func IsTextView(obj glib.IObject) (*gtk.TextView, error) {
+	// Make type assertion (as per gtk.go).
+	if textView, ok := obj.(*gtk.TextView); ok {
+		return textView, nil
+	}
+	return nil, errors.New("not a *gtk.TextView")
+}

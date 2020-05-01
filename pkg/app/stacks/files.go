@@ -2,10 +2,11 @@ package stacks
 
 import (
 	"github.com/gotk3/gotk3/gtk"
+	icore "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/mentos1386/ipfs-cloud/pkg/app/utils"
 )
 
-func CreateFiles(application *gtk.Application) (*gtk.Box, error) {
+func CreateFiles(application *gtk.Application, ipfs icore.CoreAPI) (*gtk.Box, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/stacks/files.glade")
 	if err != nil {

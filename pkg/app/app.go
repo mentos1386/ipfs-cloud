@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/mentos1386/ipfs-cloud/pkg/app/windows"
+	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
@@ -17,19 +18,16 @@ func Create(version string, appID string) (*gtk.Application, error) {
 		return nil, err
 	}
 
-	// Connect function to application startup event, this is not required.
-	_, err = application.Connect("startup", func() {
-		log.Println("application startup")
-	})
-	if err != nil {
-		return nil, err
-	}
-
 	// Connect function to application activate event
 	_, err = application.Connect("activate", func() {
 		log.Println("application activate")
 
-		mainWindow, err := windows.CreateMain(application)
+		ipfs, err := ipfs.StartNode()
+		if err != nil {
+			log.Panicf("Failed starting ipfs node! %v", err)
+		}
+
+		mainWindow, err := windows.CreateMain(application, ipfs)
 		if err != nil {
 			log.Panicf("Failed creating main window! %v", err)
 		}
