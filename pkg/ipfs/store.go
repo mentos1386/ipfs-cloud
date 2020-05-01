@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"log"
 
 	icore "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/options"
@@ -37,6 +38,8 @@ func Store(content string, node icore.CoreAPI) (path.Resolved, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("%+v\n", fileNode)
 
 	return node.Object().Put(ctx, bytes.NewReader(fileNodeJson),
 		options.Object.InputEnc("json"),
