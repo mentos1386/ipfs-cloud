@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"context"
 	"log"
 
 	"github.com/mentos1386/ipfs-cloud/pkg/app/dialogs"
@@ -12,14 +13,14 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func CreateMain(application *gtk.Application, ipfs icore.CoreAPI) (*gtk.ApplicationWindow, error) {
+func CreateMain(ctx context.Context, application *gtk.Application, ipfs icore.CoreAPI) (*gtk.ApplicationWindow, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/main.glade")
 	if err != nil {
 		return nil, err
 	}
 
-	stackUpload, err := stacks.CreateUpload(application, ipfs)
+	stackUpload, err := stacks.CreateUpload(ctx, application, ipfs)
 	if err != nil {
 		return nil, err
 	}

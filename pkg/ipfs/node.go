@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"time"
 
 	config "github.com/ipfs/go-ipfs-config"
 	libp2p "github.com/ipfs/go-ipfs/core/node/libp2p"
@@ -17,10 +16,7 @@ import (
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 )
 
-func StartNode() (icore.CoreAPI, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
-
+func StartNode(ctx context.Context) (icore.CoreAPI, error) {
 	defaultPath, err := config.PathRoot()
 	if err != nil {
 		// shouldn't be possible
@@ -72,11 +68,6 @@ func StartNode() (icore.CoreAPI, error) {
 	}
 
 	node, err := core.NewNode(ctx, nodeOptions)
-	if err != nil {
-		return nil, err
-	}
-
-	err = plugins.Start(node)
 	if err != nil {
 		return nil, err
 	}

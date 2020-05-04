@@ -1,6 +1,7 @@
 package stacks
 
 import (
+	"context"
 	"io/ioutil"
 	"log"
 
@@ -13,7 +14,7 @@ import (
 	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 )
 
-func CreateUpload(application *gtk.Application, node icore.CoreAPI) (*gtk.Box, error) {
+func CreateUpload(ctx context.Context, application *gtk.Application, node icore.CoreAPI) (*gtk.Box, error) {
 	// Get the GtkBuilder UI definition in the glade file.
 	builder, err := gtk.BuilderNewFromFile("ui/stacks/upload.glade")
 	if err != nil {
@@ -33,7 +34,7 @@ func CreateUpload(application *gtk.Application, node icore.CoreAPI) (*gtk.Box, e
 	// Map the handlers to callback functions, and connect the signals
 	// to the Builder.
 	signals := map[string]interface{}{
-		"upload_file_file_set_cb": func() { uploadFile(builder, node) },
+		"upload_file_file_set_cb": func() { uploadFile(ctx, builder, node) },
 	}
 	builder.ConnectSignals(signals)
 
@@ -60,7 +61,7 @@ func getDecryptedFile(builder *gtk.Builder) (*[]byte, error) {
 	return &b, nil
 }
 
-func uploadFile(builder *gtk.Builder, node icore.CoreAPI) {
+func uploadFile(ctx context.Context, builder *gtk.Builder, node icore.CoreAPI) {
 	state := state.GetState()
 
 	log.Println("reading file to encrypt...")
@@ -91,7 +92,7 @@ func uploadFile(builder *gtk.Builder, node icore.CoreAPI) {
 
 	log.Println(pgpMessageArmored)
 
-	path, err := ipfs.Store(pgpMessageArmored, node)
+	path, err := ipfs.Store(ctx, pgpMessageArmored, node)
 	if err != nil {
 		log.Panic(err)
 	}

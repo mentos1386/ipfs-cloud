@@ -7,6 +7,7 @@ require (
 	github.com/gotk3/gotk3 v0.4.0
 	github.com/ipfs/go-ipfs v0.5.0-rc2
 	github.com/ipfs/go-ipfs-config v0.5.2
+	github.com/ipfs/go-ipfs-files v0.0.8
 	github.com/ipfs/interface-go-ipfs-core v0.2.6
 	github.com/libp2p/go-libp2p-core v0.5.1
 	github.com/libp2p/go-libp2p-peerstore v0.2.3
