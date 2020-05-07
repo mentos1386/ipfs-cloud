@@ -2,14 +2,14 @@
 
 ##### IPFS
 
-  * [ ] Spawn IPFS Node
-  * [ ] Upload files to IPFS
+  * [x] Spawn IPFS Node
+  * [x] Upload files to IPFS
   * [ ] Make an record of all stored files
   * [ ] Download files from IPFS
 
 ##### Crypto
 
-  * [ ] Read OpenPGP pub/priv key
+  * [x] Read OpenPGP pub/priv key
   * [ ] Encrypt files using OpenPGP
     - [ ] Symetric File encryption
     - [ ] Asymetric Simetric key encryption
@@ -18,8 +18,8 @@
 
 ##### GUI
 
-  * [ ] Upload Files
+  * [x] Upload Files
   * [ ] Download files via hash
   * [ ] File Explorer
-  * [ ] Input OpenPGP pub/priv key
+  * [x] Input OpenPGP pub/priv key
   * [ ] File Encryption/Sharing

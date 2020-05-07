@@ -3,6 +3,7 @@ module github.com/mentos1386/ipfs-cloud
 go 1.14
 
 require (
+	berty.tech/go-orbit-db v1.3.1 // indirect
 	github.com/ProtonMail/gopenpgp/v2 v2.0.1-0.20200414132903-599adb6b2d6b
 	github.com/gotk3/gotk3 v0.4.0
 	github.com/ipfs/go-ipfs v0.5.0-rc2

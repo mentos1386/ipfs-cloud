@@ -12,8 +12,8 @@ An [Gnome](https://www.gnome.org/) application for storing private data on [IPFS
  * __IPFS:__ https://github.com/ipfs/go-ipfs
  * __OpenPGP:__ https://gopenpgp.org/
  * __GTK3:__ https://github.com/gotk3/gotk3
+ * __OrbitDB:__ https://github.com/berty/go-orbit-db
  * https://github.com/zalando/go-keyring
- * https://github.com/looplab/fsm
 
 ## Progress
 
