@@ -7,10 +7,6 @@ import (
 	"github.com/mentos1386/ipfs-cloud/pkg/app/windows"
 	"github.com/mentos1386/ipfs-cloud/pkg/ipfs"
 
-	orbitdb "berty.tech/go-orbit-db"
-	"berty.tech/go-orbit-db/baseorbitdb"
-	"berty.tech/go-orbit-db/iface"
-
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -30,21 +26,6 @@ func Create(version string, appID string) (*gtk.Application, error) {
 		log.Println("application activate")
 
 		ipfs, err := ipfs.StartNode(ctx)
-		if err != nil {
-			log.Panicf("Failed starting ipfs node! %v", err)
-		}
-
-		orbitdb, err := orbitdb.NewOrbitDB(ctx, ipfs, &baseorbitdb.NewOrbitDBOptions{})
-		if err != nil {
-			log.Panicf("Failed starting ipfs node! %v", err)
-		}
-
-		eventLogStore, err := orbitdb.Log(ctx, "hello", &iface.CreateDBOptions{})
-		if err != nil {
-			log.Panicf("Failed starting ipfs node! %v", err)
-		}
-
-		_, err = eventLogStore.Add(ctx, []byte("world"))
 		if err != nil {
 			log.Panicf("Failed starting ipfs node! %v", err)
 		}
